@@ -2,14 +2,10 @@
 /**
  * Displays a DataTable with all of the records
  * 
+ * TODO for any foreign key field, provide a link to the related entity's edit page
+ * 
  * @property $records
  */
-
-$model = $records->model();
-
-$fields = array_keys( $model::schema() );
-
-$key = $model::key();
 
 ?>
 <table>
@@ -29,6 +25,8 @@ $key = $model::key();
 			<td>
 <?php         if( $field == $key ):?>
 				<?=$this->html->link( $record->$field, array( 'Admin::entity', 'model_slug' => $this->_request->model_slug, 'id' => $record->$field ) );?>
+<?php         elseif( isset( $foreign_keys[$field] ) ):?>
+				<?=$this->html->link( $record->$field, array( 'Admin::entity', 'model_slug' => $foreign_keys[$field], 'id' => $record->$field ) );?>
 <?php         else:?>			
 				<?=$record->$field;?>
 <?php         endif;?>

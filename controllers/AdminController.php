@@ -31,8 +31,14 @@ class AdminController extends \lithium\action\Controller
         $model = $this->_getModel();
         
         $records = $model::all();
+
+        $fields = array_keys( $model::schema() );
+
+        $key = $model::key();
+
+        $foreign_keys = $this->_getForeignKeys();
         
-        return compact( 'records' );
+        return compact( 'records', 'fields', 'key', 'foreign_keys' );
     }
     
     public function entity()
@@ -76,5 +82,24 @@ class AdminController extends \lithium\action\Controller
         );
         
         return compact( 'conditions' );
+    }
+    
+    protected function _getForeignKeys()
+    {
+        $model = $this->_getModel();
+        
+        $foreign_keys = array();
+
+        foreach( $model::relations() as $name => $relationship )
+        {
+            if( $relationship->data('type') == 'belongsTo' )
+            {
+                $field = key( $relationship->data('key') );
+                
+                $foreign_keys[$field] = str_replace('\\', '-', $relationship->data('to') );
+            }
+        }
+        
+        return $foreign_keys;
     }
 }

@@ -6,6 +6,7 @@
  * 
  * @property $entity
  * @property $fields
+ * @property $related_entities
  */
 ?>
 
@@ -20,3 +21,15 @@
 	<?=$this->form->submit( 'Save' );?>
 
 <?=$this->form->end();?>
+
+<?php foreach( $related_entities as $key => $value ):?>
+
+<?php     if( is_a( $value, '\lithium\data\Collection' ) ):?>
+<?php         foreach( $value as $related_entity ):?>
+<?php var_dump( $related_entity);?>
+<?php         endforeach;?>
+<?php     else:?>
+<?php var_dump( $value);?>
+<?php     endif;?>
+
+<?php endforeach;?>
